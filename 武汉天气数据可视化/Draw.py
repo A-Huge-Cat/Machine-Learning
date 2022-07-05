@@ -17,7 +17,7 @@ class LineGraph:
         """
 
         year_month = x_data[0][:7]
-        max_temp, min_temp = y_data
+        max_temp, min_temp, _ = y_data
         Lines =(
             Line(init_opts=opts.InitOpts(width="1600px", height="800px"))
             .add_xaxis(xaxis_data=x_data)
@@ -57,14 +57,14 @@ class LineGraph:
         )
         return [Lines, year_month]
 
-    def add_month_timeline(self, linelist, year=""):
+    def add_month_timeline(self, linelist, year="", city="武汉"):
 
         tl = Timeline()
         for graph, year_month in linelist:
             tl.add(graph, str(year_month))
             year = year_month[:4]
 
-        tl.render("{}武汉的鬼天气.html".format(year))
+        tl.render("{}{}的鬼天气.html".format(year, city))
 
 
 
