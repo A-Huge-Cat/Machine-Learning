@@ -1,5 +1,7 @@
+import time
+
 import pyecharts.options as opts
-from pyecharts.charts import Line
+from pyecharts.charts import Line, Pie
 from pyecharts.charts import Timeline
 import numpy as np
 
@@ -7,6 +9,7 @@ import numpy as np
 class LineGraph:
     def __init__(self):
         self.text = "折线图"
+
     @staticmethod
     def draw(x_data, y_data):
         """
@@ -18,7 +21,7 @@ class LineGraph:
 
         year_month = x_data[0][:7]
         max_temp, min_temp, _ = y_data
-        Lines =(
+        Lines = (
             Line(init_opts=opts.InitOpts(width="1600px", height="800px"))
             .add_xaxis(xaxis_data=x_data)
             .add_yaxis(
@@ -58,14 +61,25 @@ class LineGraph:
         return [Lines, year_month]
 
     def add_month_timeline(self, linelist, year="", city="武汉"):
-
         tl = Timeline()
         for graph, year_month in linelist:
             tl.add(graph, str(year_month))
-            year = year_month[:4]
 
-        tl.render("{}{}的鬼天气.html".format(year, city))
-
+        tl.render("{}-{}{}的鬼天气.html".format(str(time.time()), year, city))
 
 
+class PieGraph:
+    def __init__(self):
+        self.text = "大饼"
 
+    @staticmethod
+    def draw(item, rate):
+        c = (
+            Pie()
+            .add("", [list(z) for z in zip(item, rate)])
+            .set_colors(["blue", "green", "red"])
+            .set_global_opts(title_opts=opts.TitleOpts(title="气温状况"))
+            .set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}"))
+            # .render("pie_set_color.html")
+        )
+        return c
